@@ -1,17 +1,38 @@
+import os
+from pathlib import Path
+from dotenv import load_dotenv
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
-from pathlib import Path
 from export_utils import export_to_csv, export_to_excel
+
+# Load environment variables
+load_dotenv()
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets.readonly"]
 
-CREDENTIALS_PATH = Path("config/credentials.json")
+SPREADSHEET_ID = os.getenv("SPREADSHEET_ID")
+RANGE_NAME = os.getenv("RANGE_NAME")
+CREDENTIALS_PATH = Path(os.getenv("GOOGLE_CREDENTIALS_PATH", ""))
 
-SPREADSHEET_ID = "PASTE_YOUR_SHEET_ID_HERE"
-RANGE_NAME = "Sheet1!A1:Z1000"
+
+def validate_env():
+    missing = []
+    if not SPREADSHEET_ID:
+        missing.append("SPREADSHEET_ID")
+    if not RANGE_NAME:
+        missing.append("RANGE_NAME")
+    if not CREDENTIALS_PATH.exists():
+        missing.append("GOOGLE_CREDENTIALS_PATH")
+
+    if missing:
+        raise RuntimeError(
+            f"Missing or invalid environment variables: {', '.join(missing)}"
+        )
 
 
 def main():
+    validate_env()
+
     flow = InstalledAppFlow.from_client_secrets_file(
         CREDENTIALS_PATH, SCOPES
     )
@@ -33,12 +54,15 @@ def main():
     headers = values[0]
     rows = values[1:]
 
-    formatted = [dict(zip(headers, row)) for row in rows]
+    formatted = [
+        dict(zip(headers, row + [""] * (len(headers) - len(row))))
+        for row in rows
+    ]
 
     export_to_csv(formatted)
     export_to_excel(formatted)
 
-    print("Export completed successfully.")
+    print("✅ Export completed successfully.")
 
 
 if __name__ == "__main__":

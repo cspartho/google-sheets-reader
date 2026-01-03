@@ -24,9 +24,14 @@ Create Google API credentials (one-time setup)
 - Enable Google Sheets API
 - Create OAuth Client ID
 
-Download credentials.json
+Download credentials.json and place it to config folder
+
+## Configuration (.env)
+Copy the example file:
+```bash
+cp .env.example .env 
 
 ### 1. Clone repo
 ```bash
-git clone https://github.com/yourusername/google-sheets-reader.git
+git clone https://github.com/cspartho/google-sheets-reader.git
 cd google-sheets-reader
