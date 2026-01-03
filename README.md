@@ -31,6 +31,17 @@ Copy the example file:
 ```bash
 cp .env.example .env 
 ```
+Edit .env:
+```
+SPREADSHEET_ID=your_sheet_id
+RANGE_NAME=Sheet1!A1:D500
+GOOGLE_CREDENTIALS_PATH=config/credentials.json
+```
+## Run the script
+```
+python src/fetch_sheet.py
+```
+
 ## Clone repo
 ```bash
 git clone https://github.com/cspartho/google-sheets-reader.git
