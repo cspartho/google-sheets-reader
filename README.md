@@ -30,8 +30,9 @@ Download credentials.json and place it to config folder
 Copy the example file:
 ```bash
 cp .env.example .env 
-
-### 1. Clone repo
+```
+## Clone repo
 ```bash
 git clone https://github.com/cspartho/google-sheets-reader.git
 cd google-sheets-reader
+```
